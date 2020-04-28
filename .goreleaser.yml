@@ -27,6 +27,10 @@ dockers:
       - "docker.pkg.github.com/adfinis-sygroup/potz-holzoepfel-und-zipfelchape/app:v{{ .Major }}"
       - "docker.pkg.github.com/adfinis-sygroup/potz-holzoepfel-und-zipfelchape/app:v{{ .Major }}.{{ .Minor }}"
       - "docker.pkg.github.com/adfinis-sygroup/potz-holzoepfel-und-zipfelchape/app:latest"
+      - "docker.io/adfinissygroup/potz-holzoepfel-und-zipfelchape:{{ .Tag }}"
+      - "docker.io/adfinissygroup/potz-holzoepfel-und-zipfelchape:v{{ .Major }}"
+      - "docker.io/adfinissygroup/potz-holzoepfel-und-zipfelchape:v{{ .Major }}.{{ .Minor }}"
+      - "docker.io/adfinissygroup/potz-holzoepfel-und-zipfelchape:latest"
     build_flag_templates:
       - "--label=org.opencontainers.image.created={{.Date}}"
       - "--label=org.opencontainers.image.name={{.ProjectName}}"
