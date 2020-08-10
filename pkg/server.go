@@ -17,7 +17,9 @@ import (
 	"github.com/prometheus/client_golang/prometheus/promhttp"
 	metrics "github.com/slok/go-http-metrics/metrics/prometheus"
 	"github.com/slok/go-http-metrics/middleware"
+	"github.com/slok/go-http-metrics/middleware/std"
 
+	// import files that we are embedding
 	_ "github.com/adfinis-sygroup/potz-holzoepfel-und-zipfelchape/statik"
 )
 
@@ -45,7 +47,7 @@ func RunServer(listenAddr string) {
 	})
 
 	router := http.NewServeMux()
-	router.Handle("/", mdlw.Handler("", http.FileServer(statikFS)))
+	router.Handle("/", std.Handler("", mdlw, http.FileServer(statikFS)))
 	router.Handle("/healthz", healthz())
 	router.Handle("/metrics", promhttp.Handler())
 
