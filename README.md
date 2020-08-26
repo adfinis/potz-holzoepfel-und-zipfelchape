@@ -43,6 +43,16 @@ Build a local copy of the server.
 go build
 ```
 
+### MongoDB persistance layer
+
+There is a `docker-compose.yml` to run a local MongoDB instance that works
+with the default settings.
+
+```bash
+docker-compose up -d
+go run main.go --persistence
+```
+
 ### Release Process
 
 Create a git tag and push it to this repo or use the git web ui.
