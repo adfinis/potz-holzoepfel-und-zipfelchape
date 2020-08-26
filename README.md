@@ -8,6 +8,7 @@ Tri Tra Trulla La!
 * Available as minimal container image (`FROM scratch`)
 * Prometheus endpoint availabe (`/metrics`)
 * Supports tracing
+* May use MongoDB as persistance layer to display a simple web counter (optional)
 
 ## Usage
 
@@ -27,6 +28,33 @@ Get metrics:
 ```bash
 curl localhost:8080/metrics
 ```
+
+### Running with enabled persistence
+
+You can run Caasperli with an optional persistance layer and it will display a
+simple hit counter with data from MongoDB.
+
+```bash
+potz-holzoepfel-und-zipfelchape \
+  --persistance
+  --mongodb-uri="mongodb://root:hunter2@localhost:27017"
+```
+
+### Persistence on Cloud Foundry
+
+If you are running on Cloud Foundry you can activate the persistence layer by
+attaching a MongoDB service called `mongodb` to the application.
+
+```
+cf push caasperli --no-start
+cf create-service mongodb <plan> mongodb
+cf bind-service caasperli mongodb
+cf start caasperli
+```
+
+Caasperli will detect that it is running on Cloud Foundry and automatically
+activate it's persistance layer if a service called `mongodb` is bound to the
+app.
 
 ## Development
 
