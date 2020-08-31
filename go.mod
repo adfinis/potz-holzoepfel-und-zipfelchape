@@ -3,6 +3,7 @@ module github.com/adfinis-sygroup/potz-holzoepfel-und-zipfelchape
 go 1.13
 
 require (
+	github.com/cloudfoundry-community/go-cfenv v1.18.0
 	github.com/fsnotify/fsnotify v1.4.9 // indirect
 	github.com/mitchellh/go-homedir v1.1.0
 	github.com/mitchellh/mapstructure v1.3.3 // indirect

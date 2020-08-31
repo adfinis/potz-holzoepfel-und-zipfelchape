@@ -4,6 +4,9 @@ import (
 	"fmt"
 	"os"
 
+	log "github.com/sirupsen/logrus"
+
+	"github.com/cloudfoundry-community/go-cfenv"
 	homedir "github.com/mitchellh/go-homedir"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
@@ -81,4 +84,18 @@ func initConfig() {
 	if err := viper.ReadInConfig(); err == nil {
 		fmt.Println("Using config file:", viper.ConfigFileUsed())
 	}
+
+	if cfenv.IsRunningOnCF() {
+		log.Info("We are running on Cloud Foundry!")
+		appEnv, _ := cfenv.Current()
+		mongoService, err := appEnv.Services.WithName("mongodb")
+		if err != nil {
+			log.Warn(err)
+		} else {
+			mongodbURI, _ = mongoService.CredentialString("uri")
+			persistence = true
+			log.Info("MongoDB credentials detected in service mongodb, activating persistence layer.")
+		}
+	}
+
 }
