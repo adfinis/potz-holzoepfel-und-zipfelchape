@@ -6,4 +6,4 @@ func main() {
 	cmd.Execute()
 }
 
-//go:generate statik --include=*.html
+//go:generate statik -f --include=*.html
