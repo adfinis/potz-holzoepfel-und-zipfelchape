@@ -56,6 +56,12 @@ Caasperli will detect that it is running on Cloud Foundry and automatically
 activate it's persistance layer if a service called `mongodb` is bound to the
 app.
 
+### Deploying with Waypoint
+
+```
+waypoint up
+````
+
 ## Development
 
 ### Statik
