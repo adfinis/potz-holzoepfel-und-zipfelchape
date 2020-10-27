@@ -36,7 +36,7 @@ simple hit counter with data from MongoDB.
 
 ```bash
 potz-holzoepfel-und-zipfelchape \
-  --persistance
+  --persistence
   --mongodb-uri="mongodb://root:hunter2@localhost:27017"
 ```
 
