@@ -3,7 +3,6 @@ package pkg
 import (
 	"context"
 	"fmt"
-	"io/ioutil"
 	stdlog "log"
 	"net/http"
 	"os"
@@ -12,8 +11,6 @@ import (
 	"sync/atomic"
 	"text/template"
 	"time"
-
-	"github.com/rakyll/statik/fs"
 
 	log "github.com/sirupsen/logrus"
 
@@ -25,8 +22,7 @@ import (
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"
 
-	// import files that we are embedding
-	_ "github.com/adfinis-sygroup/potz-holzoepfel-und-zipfelchape/statik"
+	"github.com/adfinis-sygroup/potz-holzoepfel-und-zipfelchape/public"
 )
 
 type key int
@@ -43,25 +39,11 @@ var (
 func RunServer(listenAddr string, persistence bool, mongodbURI string, mongodbDatabase string, mongodbCollection string, mongodbDocumentID string) {
 
 	logger := log.New()
-
-	statikFS, err := fs.New()
-	if err != nil {
-		log.Fatal(err)
-	}
-	file, err := statikFS.Open("/index.html")
-	if err != nil {
-		log.Fatal(err)
-	}
-	defer file.Close()
-	indexTemplateContents, err := ioutil.ReadAll(file)
-	if err != nil {
-		log.Fatal(err)
-	}
 	funcMap := template.FuncMap{
 		"str":  strconv.Itoa,
 		"stoa": stoa,
 	}
-	indexTemplate := template.Must(template.New("index").Funcs(funcMap).Parse(string(indexTemplateContents)))
+	indexTemplate := template.Must(template.New("index").Funcs(funcMap).Parse(public.IndexTpl))
 
 	mdlw := middleware.New(middleware.Config{
 		Recorder: metrics.NewRecorder(metrics.Config{}),

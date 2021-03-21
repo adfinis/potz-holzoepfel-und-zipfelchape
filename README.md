@@ -64,11 +64,10 @@ waypoint up
 
 ## Development
 
-### Statik
-Regenerate `statik/` dir after changing `public/` dir.
+Run a server.
 
 ```bash
-go generate
+go run main.go
 ```
 
 Build a local copy of the server.
