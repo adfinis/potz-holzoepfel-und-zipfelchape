@@ -30,15 +30,15 @@ type Counter struct {
 var initOnce sync.Once
 
 // Content returns the counter document from the backing store
-func (h *counterHandler) Content() Counter {
+func (h *counterHandler) Content(reqCtx context.Context) Counter {
 	initOnce.Do(func() {
 		h.collection = h.mongodbClient.Database(h.mongodbDatabase).Collection(h.mongodbCollection)
 		h.counterID, _ = primitive.ObjectIDFromHex(h.mongodbDocumentID)
 	})
 
-	h.incrementCounter()
+	h.incrementCounter(reqCtx)
 
-	ctx, cancel := context.WithTimeout(context.Background(), 3*time.Second)
+	ctx, cancel := context.WithTimeout(reqCtx, 3*time.Second)
 	defer cancel()
 
 	// get record from MongoDB
@@ -51,8 +51,8 @@ func (h *counterHandler) Content() Counter {
 }
 
 // incrementCounter is used to update the visit counter on each request to /counter
-func (h *counterHandler) incrementCounter() {
-	ctx, cancel := context.WithTimeout(context.Background(), 3*time.Second)
+func (h *counterHandler) incrementCounter(reqCtx context.Context) {
+	ctx, cancel := context.WithTimeout(reqCtx, 3*time.Second)
 	defer cancel()
 
 	result, err := h.collection.UpdateOne(
