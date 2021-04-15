@@ -22,6 +22,7 @@ var (
 	mongodbDatabase   string
 	mongodbCollection string
 	mongodbDocumentID string
+	jaegerServiceName string
 )
 
 // rootCmd represents the base command when called without any subcommands
@@ -31,7 +32,7 @@ var rootCmd = &cobra.Command{
 	Long:  "Dr Caasperli isch wider da! Dr Caasperli isch da.",
 	Run: func(cmd *cobra.Command, args []string) {
 
-		pkg.RunServer(listenAddr, persistence, mongodbURI, mongodbDatabase, mongodbCollection, mongodbDocumentID)
+		pkg.RunServer(listenAddr, persistence, mongodbURI, mongodbDatabase, mongodbCollection, mongodbDocumentID, jaegerServiceName)
 	},
 }
 
@@ -54,6 +55,7 @@ func init() {
 	rootCmd.PersistentFlags().StringVar(&mongodbDatabase, "mongodb-database", "test", "MongoDB database")
 	rootCmd.PersistentFlags().StringVar(&mongodbCollection, "mongodb-collection", "counter", "MongoDB collection")
 	rootCmd.PersistentFlags().StringVar(&mongodbDocumentID, "mongodb-document-id", "DECAFBAD", "MongoDB counter document ID")
+	rootCmd.PersistentFlags().StringVar(&jaegerServiceName, "jaeger-service-name", rootCmd.Use, "Jaeger client service name")
 	if err := viper.BindPFlag("listen-addr", rootCmd.PersistentFlags().Lookup("listen-addr")); err != nil {
 		fmt.Println(err)
 		os.Exit(1)

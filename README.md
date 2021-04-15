@@ -29,6 +29,25 @@ Get metrics:
 curl localhost:8080/metrics
 ```
 
+### Configure Jaeger tracing middleware
+
+Caasperli is instrumented using [`jaeger-client-go`](https://github.com/jaegertracing/jaeger-client-go). 
+
+The instrumentation layer is configured via environment variables. The following example shows how to
+send spans to the jaeger collector over TCP while sampling each request to ensure you get some test
+data in Jaeger ASAP.
+
+```bash
+export JAEGER_ENDPOINT=http://jaeger.example.com:14268/api/traces
+export JAEGER_SAMPLER_TYPE=const
+export JAEGER_SAMPLER_PARAM=1
+
+potz-holzoepfel-und-zipfelchape
+```
+
+If you enable persistence as described below then MongoDB operations will be added
+to the default requests spans.
+
 ### Running with enabled persistence
 
 You can run Caasperli with an optional persistance layer and it will display a

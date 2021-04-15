@@ -9,6 +9,11 @@ services:
       - 27017:27017
     volumes:
       - mongodb_data_container:/data/db
+  jaeger_aio:
+    image: jaegertracing/all-in-one:1.22
+    ports:
+      - 16686:16686
+      - 14268:14268
 
 volumes:
   mongodb_data_container:

@@ -19,6 +19,14 @@ import (
 	"github.com/slok/go-http-metrics/middleware"
 	"github.com/slok/go-http-metrics/middleware/std"
 
+	jaegerLog "github.com/adfinis-sygroup/potz-holzoepfel-und-zipfelchape/pkg/jaeger/log"
+	tracingNethttp "github.com/opentracing-contrib/go-stdlib/nethttp"
+	opentracing "github.com/opentracing/opentracing-go"
+	jaegerConfig "github.com/uber/jaeger-client-go/config"
+	jaegerPrometheus "github.com/uber/jaeger-lib/metrics/prometheus"
+
+	mongodbTracer "github.com/adfinis-sygroup/potz-holzoepfel-und-zipfelchape/pkg/mongodb/tracer"
+	"go.mongodb.org/mongo-driver/event"
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"
 
@@ -36,9 +44,28 @@ var (
 )
 
 // RunServer serves the site and handles server health and metrics
-func RunServer(listenAddr string, persistence bool, mongodbURI string, mongodbDatabase string, mongodbCollection string, mongodbDocumentID string) {
+func RunServer(listenAddr string, persistence bool, mongodbURI string, mongodbDatabase string, mongodbCollection string, mongodbDocumentID string, jaegerServiceName string) {
 
 	logger := log.New()
+
+	metricsFactory := jaegerPrometheus.New()
+	cfg, err := jaegerConfig.FromEnv()
+	if err != nil {
+		logger.Fatal(err)
+	}
+	if cfg.ServiceName == "" {
+		cfg.ServiceName = jaegerServiceName
+	}
+	tracer, tracerClose, err := cfg.NewTracer(
+		jaegerConfig.Metrics(metricsFactory),
+		jaegerConfig.Logger(jaegerLog.NewLogrusAdapter(logger)),
+	)
+	if err != nil {
+		logger.Fatal(err)
+	}
+	opentracing.SetGlobalTracer(tracer)
+	defer tracerClose.Close()
+
 	funcMap := template.FuncMap{
 		"str":  strconv.Itoa,
 		"stoa": stoa,
@@ -55,8 +82,14 @@ func RunServer(listenAddr string, persistence bool, mongodbURI string, mongodbDa
 	if persistence {
 		ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 		defer cancel()
-		client, err := mongo.Connect(ctx, options.Client().ApplyURI(mongodbURI))
 
+		mtr := mongodbTracer.NewTracer()
+		monitor := &event.CommandMonitor{
+			Started:   mtr.HandleStartedEvent,
+			Succeeded: mtr.HandleSucceededEvent,
+			Failed:    mtr.HandleFailedEvent,
+		}
+		client, err := mongo.Connect(ctx, options.Client().ApplyURI(mongodbURI).SetMonitor(monitor))
 		defer func() {
 			if err = client.Disconnect(ctx); err != nil {
 				log.Fatal(err)
@@ -76,7 +109,7 @@ func RunServer(listenAddr string, persistence bool, mongodbURI string, mongodbDa
 	}
 
 	router := http.NewServeMux()
-	router.Handle("/", std.Handler("", mdlw, index(indexTemplate, counter)))
+	router.Handle("/", tracingNethttp.Middleware(tracer, std.Handler("", mdlw, index(indexTemplate, counter))))
 	router.Handle("/healthz", healthz())
 	router.Handle("/metrics", promhttp.Handler())
 
@@ -136,7 +169,7 @@ func index(template *template.Template, counterHandle counterHandler) http.Handl
 
 		indexData := Counter{}
 		if counterHandle.Active {
-			indexData = counterHandle.Content()
+			indexData = counterHandle.Content(r.Context())
 		}
 
 		err := template.Execute(w, indexData)
