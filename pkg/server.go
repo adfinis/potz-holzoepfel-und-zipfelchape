@@ -182,7 +182,10 @@ func index(template *template.Template, counterHandle counterHandler) http.Handl
 func healthz() http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		if atomic.LoadInt32(&healthy) == 1 {
-			w.WriteHeader(http.StatusNoContent)
+			_, err := w.Write([]byte("OK"))
+			if err != nil {
+				log.Fatal(err)
+			}
 			return
 		}
 		w.WriteHeader(http.StatusServiceUnavailable)
