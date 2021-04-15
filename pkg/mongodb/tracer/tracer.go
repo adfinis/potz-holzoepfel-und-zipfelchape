@@ -63,6 +63,7 @@ func (t *tracer) HandleFailedEvent(ctx context.Context, evt *event.CommandFailed
 		if span, ok := rawSpan.(opentracing.Span); ok {
 			defer span.Finish()
 			ext.Error.Set(span, true)
+			span.SetTag(prefix+"duration", evt.DurationNanos)
 			span.LogFields(log.String("failure", evt.Failure))
 		}
 	}
