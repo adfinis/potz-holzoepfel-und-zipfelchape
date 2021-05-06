@@ -43,6 +43,11 @@ var (
 	healthy int32
 )
 
+type indexValues struct {
+	Count    int
+	Hostname string
+}
+
 // RunServer serves the site and handles server health and metrics
 func RunServer(listenAddr string, persistence bool, mongodbURI string, mongodbDatabase string, mongodbCollection string, mongodbDocumentID string, jaegerServiceName string) {
 
@@ -75,6 +80,11 @@ func RunServer(listenAddr string, persistence bool, mongodbURI string, mongodbDa
 	mdlw := middleware.New(middleware.Config{
 		Recorder: metrics.NewRecorder(metrics.Config{}),
 	})
+
+	hostname, err := os.Hostname()
+	if err != nil {
+		log.WithError(err).Fatal()
+	}
 
 	counter := counterHandler{
 		Active: persistence,
@@ -109,7 +119,7 @@ func RunServer(listenAddr string, persistence bool, mongodbURI string, mongodbDa
 	}
 
 	router := http.NewServeMux()
-	router.Handle("/", tracingNethttp.Middleware(tracer, std.Handler("", mdlw, index(indexTemplate, counter))))
+	router.Handle("/", tracingNethttp.Middleware(tracer, std.Handler("", mdlw, index(indexTemplate, counter, hostname))))
 	router.Handle("/healthz", healthz())
 	router.Handle("/metrics", promhttp.Handler())
 
@@ -158,7 +168,7 @@ func RunServer(listenAddr string, persistence bool, mongodbURI string, mongodbDa
 	logger.Println("Server stopped")
 }
 
-func index(template *template.Template, counterHandle counterHandler) http.Handler {
+func index(template *template.Template, counterHandle counterHandler, hostname string) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		if r.URL.Path != "/" {
 			w.WriteHeader(http.StatusNotFound)
@@ -167,9 +177,11 @@ func index(template *template.Template, counterHandle counterHandler) http.Handl
 
 		w.Header().Set("Content-Type", "text/html")
 
-		indexData := Counter{}
+		indexData := indexValues{
+			Hostname: hostname,
+		}
 		if counterHandle.Active {
-			indexData = counterHandle.Content(r.Context())
+			indexData.Count = counterHandle.Content(r.Context()).Count
 		}
 
 		err := template.Execute(w, indexData)
