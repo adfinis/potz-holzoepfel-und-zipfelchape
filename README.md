@@ -75,6 +75,15 @@ Caasperli will detect that it is running on Cloud Foundry and automatically
 activate it's persistance layer if a service called `mongodb` is bound to the
 app.
 
+### Building with pack
+
+This app can also be used with [buildpacks/pack](https://github.com/buildpacks/pack)
+
+```
+pack config default-builder gcr.io/buildpacks/builder:v1
+pack build caasperli
+```
+
 ### Deploying with Waypoint
 
 ```
