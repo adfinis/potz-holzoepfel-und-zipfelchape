@@ -7,6 +7,7 @@ Tri Tra Trulla La!
 * Hosts an embedded copy of Caasperli on port 8080
 * Available as minimal container image (`FROM scratch`)
 * Prometheus endpoint availabe (`/metrics`)
+* Health endpoint availabe (`/healthz`)
 * Supports tracing
 * May use MongoDB as persistance layer to display a simple web counter (optional)
 
