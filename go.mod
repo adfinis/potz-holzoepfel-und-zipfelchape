@@ -21,7 +21,7 @@ require (
 	github.com/spf13/viper v1.7.1
 	github.com/uber/jaeger-client-go v2.25.0+incompatible
 	github.com/uber/jaeger-lib v2.4.0+incompatible
-	go.mongodb.org/mongo-driver v1.5.0
+	go.mongodb.org/mongo-driver v1.5.1
 	google.golang.org/protobuf v1.26.0 // indirect
 	gopkg.in/ini.v1 v1.62.0 // indirect
 )
