@@ -13,11 +13,11 @@ Tri Tra Trulla La!
 
 ## Usage
 
-Run an `potz-holzoepfel-und-zipfelchape` binary from the [releases page](https://github.com/adfinis-sygroup/potz-holzoepfel-und-zipfelchape/releases) or use
-the container available at `ghcr.io/adfinis-sygroup/potz-holzoepfel-und-zipfelchape`.
+Run an `potz-holzoepfel-und-zipfelchape` binary from the [releases page](https://github.com/adfinis/potz-holzoepfel-und-zipfelchape/releases) or use
+the container available at `ghcr.io/adfinis/potz-holzoepfel-und-zipfelchape`.
 
 ```bash
-docker run --rm -ti -p 8080:8080 ghcr.io/adfinis-sygroup/potz-holzoepfel-und-zipfelchape
+docker run --rm -ti -p 8080:8080 ghcr.io/adfinis/potz-holzoepfel-und-zipfelchape
 ```
 
 Get page contents:

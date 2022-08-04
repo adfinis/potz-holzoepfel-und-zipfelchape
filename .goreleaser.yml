@@ -23,10 +23,10 @@ changelog:
     - '^test:'
 dockers:
   - image_templates:
-      - "ghcr.io/adfinis-sygroup/potz-holzoepfel-und-zipfelchape:{{ .Tag }}"
-      - "ghcr.io/adfinis-sygroup/potz-holzoepfel-und-zipfelchape:v{{ .Major }}"
-      - "ghcr.io/adfinis-sygroup/potz-holzoepfel-und-zipfelchape:v{{ .Major }}.{{ .Minor }}"
-      - "ghcr.io/adfinis-sygroup/potz-holzoepfel-und-zipfelchape:latest"
+      - "ghcr.io/adfinis/potz-holzoepfel-und-zipfelchape:{{ .Tag }}"
+      - "ghcr.io/adfinis/potz-holzoepfel-und-zipfelchape:v{{ .Major }}"
+      - "ghcr.io/adfinis/potz-holzoepfel-und-zipfelchape:v{{ .Major }}.{{ .Minor }}"
+      - "ghcr.io/adfinis/potz-holzoepfel-und-zipfelchape:latest"
     build_flag_templates:
       - "--label=org.opencontainers.image.created={{.Date}}"
       - "--label=org.opencontainers.image.name={{.ProjectName}}"
