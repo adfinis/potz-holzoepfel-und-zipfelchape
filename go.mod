@@ -8,7 +8,7 @@ require (
 	github.com/opentracing-contrib/go-stdlib v1.0.0
 	github.com/opentracing/opentracing-go v1.2.0
 	github.com/prometheus/client_golang v1.15.1
-	github.com/sirupsen/logrus v1.9.2
+	github.com/sirupsen/logrus v1.9.3
 	github.com/slok/go-http-metrics v0.10.0
 	github.com/spf13/cobra v1.7.0
 	github.com/spf13/viper v1.16.0
