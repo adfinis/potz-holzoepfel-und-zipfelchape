@@ -49,7 +49,7 @@ func (t *tracer) HandleSucceededEvent(ctx context.Context, evt *event.CommandSuc
 		if span, ok := rawSpan.(opentracing.Span); ok {
 			defer span.Finish()
 			span.SetTag(prefix+"reply", string(evt.Reply))
-			span.SetTag(prefix+"duration", evt.DurationNanos)
+			span.SetTag(prefix+"duration", evt.Duration)
 		}
 	}
 }
@@ -63,7 +63,7 @@ func (t *tracer) HandleFailedEvent(ctx context.Context, evt *event.CommandFailed
 		if span, ok := rawSpan.(opentracing.Span); ok {
 			defer span.Finish()
 			ext.Error.Set(span, true)
-			span.SetTag(prefix+"duration", evt.DurationNanos)
+			span.SetTag(prefix+"duration", evt.Duration)
 			span.LogFields(log.String("failure", evt.Failure))
 		}
 	}
