@@ -11,7 +11,7 @@ import (
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
 
-	"github.com/adfinis-sygroup/potz-holzoepfel-und-zipfelchape/pkg"
+	"github.com/adfinis/potz-holzoepfel-und-zipfelchape/pkg"
 )
 
 var (
