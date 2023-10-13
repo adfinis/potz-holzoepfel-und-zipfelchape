@@ -1,4 +1,4 @@
-module github.com/adfinis-sygroup/potz-holzoepfel-und-zipfelchape
+module github.com/adfinis/potz-holzoepfel-und-zipfelchape
 
 go 1.20
 

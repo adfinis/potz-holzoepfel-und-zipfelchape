@@ -19,18 +19,18 @@ import (
 	"github.com/slok/go-http-metrics/middleware"
 	"github.com/slok/go-http-metrics/middleware/std"
 
-	jaegerLog "github.com/adfinis-sygroup/potz-holzoepfel-und-zipfelchape/pkg/jaeger/log"
+	jaegerLog "github.com/adfinis/potz-holzoepfel-und-zipfelchape/pkg/jaeger/log"
 	tracingNethttp "github.com/opentracing-contrib/go-stdlib/nethttp"
 	opentracing "github.com/opentracing/opentracing-go"
 	jaegerConfig "github.com/uber/jaeger-client-go/config"
 	jaegerPrometheus "github.com/uber/jaeger-lib/metrics/prometheus"
 
-	mongodbTracer "github.com/adfinis-sygroup/potz-holzoepfel-und-zipfelchape/pkg/mongodb/tracer"
+	mongodbTracer "github.com/adfinis/potz-holzoepfel-und-zipfelchape/pkg/mongodb/tracer"
 	"go.mongodb.org/mongo-driver/event"
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"
 
-	"github.com/adfinis-sygroup/potz-holzoepfel-und-zipfelchape/public"
+	"github.com/adfinis/potz-holzoepfel-und-zipfelchape/public"
 )
 
 type key int
