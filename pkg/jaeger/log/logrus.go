@@ -17,7 +17,7 @@ func NewLogrusAdapter(logger *log.Logger) *logrusAdapter {
 }
 
 func (l *logrusAdapter) Error(msg string) {
-	l.logger.Errorf(msg)
+	l.logger.Error(msg)
 }
 
 func (l *logrusAdapter) Infof(msg string, args ...interface{}) {
